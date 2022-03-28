@@ -6,13 +6,13 @@ import java.util.*;
 class Filme{
     private String nome;
     private String tituloOriginal;
-    private Date dataDeLancamento = new Date();
+    private Date dataDeLancamento;
     private int duracao;
     private String genero;
     private String idiomaOriginal;
     private String situacao;
     private float orcamento;
-    private String[] palavrasChave = new String();
+    private String[] palavrasChave;
 
     //primeiro construtor
     Filme(){
