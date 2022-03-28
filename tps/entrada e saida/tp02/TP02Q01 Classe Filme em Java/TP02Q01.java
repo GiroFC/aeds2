@@ -158,10 +158,10 @@ class Filme{
         this.situacao = removeTags(br.readLine());
 
         while(!br.readLine().contains("N.º de temporadas"));
-        this.numTemporadas = Integer.parseInt(removeTags(br.readLine()));
+        this.orcamento = Float.parseFloat(removeTags(br.readLine()));
 
         while(!br.readLine().contains("N.º de episódios"));
-        this.numEpisodios = Integer.parseInt(removeTags(br.readLine()));
+        this.palavrasChave = removeTags(br.readLine());
 
         br.close();
     }
