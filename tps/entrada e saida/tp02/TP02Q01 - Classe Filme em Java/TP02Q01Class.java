@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 class Filme{
@@ -18,20 +20,20 @@ class Filme{
     Filme(){
         nome = "";
         tituloOriginal = "";
-        dataDeLancamento = "";
+        dataDeLancamento = new Date();
         duracao = 0;
         genero = "";
         idiomaOriginal = "";
         situacao = "";
         orcamento = 0;
-        palavrasChave = "";
+        palavrasChave = null;
     }
 
     //Segundo construtor, agora recebendo argumentos
     Filme(String nome, String tituloOriginal, Date dataDeLançamento, int duracao, String genero, String idiomaOriginal, String situacao, float orcamento, String palavrasChave[]){
         this.nome = nome;
         this.tituloOriginal = tituloOriginal;
-        this.dataDeLancamento = dataDeLancamento;
+        this.dataDeLancamento = new Date();
         this.duracao = duracao;
         this.genero = genero;
         this.idiomaOriginal = idiomaOriginal;
@@ -116,7 +118,11 @@ class Filme{
         return palavrasChave;
     }
 
-    String removeTags(String line){
+    /*
+    * método pra remover as tags dos html
+    * @param line string passada pelo terminal 
+     */
+    public String removeTags(String line){
         String newline="";
         int i = 0;
         while(i<line.length()){
@@ -128,6 +134,7 @@ class Filme{
             }
             i++;
         }
+        return newline;
     }
 
     //Leitor
@@ -143,7 +150,12 @@ class Filme{
         this.tituloOriginal = removeTags(br.readLine());
 
         while(!br.readLine().contains("Data de lançamento"));
-        this.dataDeLancamento = Date.parseDate(removeTags(br.readLine()));
+        try{
+            SimpleDateFormat formate = new SimpleDateFormat("dd/MM/yyyy");
+        this.dataDeLancamento = formate.parse(removeTags(br.readLine()));
+        }catch(ParseException e){
+            e.printStackTrace();
+        }
 
         while(!br.readLine().contains("Duração"));
         this.duracao = Integer.parseInt(removeTags(br.readLine()));
@@ -161,7 +173,7 @@ class Filme{
         this.orcamento = Float.parseFloat(removeTags(br.readLine()));
 
         while(!br.readLine().contains("N.º de episódios"));
-        this.palavrasChave = removeTags(br.readLine());
+        this.palavrasChave = removeTags(br.readLine()).split(",");
 
         br.close();
     }
@@ -183,18 +195,21 @@ class Filme{
 
     //imprimir
     public void Imprimir(){
-        System.out.println(nome + " " + tituloOriginal + " " + dataDeLancamento + " " + duracao + " " + genero + " " + idiomaOriginal + " " + situacao + " " + orcamento + " " + palavrasChave);
+        System.out.print(nome + " " + tituloOriginal + " " + dataDeLancamento + " " + duracao + " " + genero + " " + idiomaOriginal + " " + situacao + " " + orcamento + " ");
     }
     
 
-    class TP02Q01{
+    
+}
+
+public class TP02Q01Class{
 
         public static boolean isFim(String s) {
             return(s.length() == 3 && s.charAt(0) == 'F' && s.charAt(1) == 'I' && s.charAt(2) == 'M');
         }
     
-        public static void main(String[] args) {
-            Filme serie = new Filme();
+        public static void main(String[] args){
+            Filme filme = new Filme();
             String[] input = new String[1000];
             int numInput = 0;
     
@@ -206,11 +221,11 @@ class Filme{
     
             for(int i = 0; i < numInput;i++){
                 try{
-                    serie.ler("/tmp/filmes/"+input[i]);
+                    filme.ler("/tmp/Filmes/"+input[i]);
                 }catch(Exception e){
                 }
-                serie.Imprimir();
+                filme.Imprimir();
             }
         }
-    }
 }
+
