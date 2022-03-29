@@ -169,11 +169,15 @@ class Filme{
         while(!br.readLine().contains("Situação"));
         this.situacao = removeTags(br.readLine());
 
-        while(!br.readLine().contains("N.º de temporadas"));
+        while(!br.readLine().contains("Orçamento"));
         this.orcamento = Float.parseFloat(removeTags(br.readLine()));
 
-        while(!br.readLine().contains("N.º de episódios"));
-        this.palavrasChave = removeTags(br.readLine()).split(",");
+        int i = 0;
+        while(!br.readLine().contains("Keyword")){
+            this.palavrasChave[i] = removeTags(br.readLine());
+            i++;
+        }
+        
 
         br.close();
     }
@@ -196,6 +200,11 @@ class Filme{
     //imprimir
     public void Imprimir(){
         System.out.print(nome + " " + tituloOriginal + " " + dataDeLancamento + " " + duracao + " " + genero + " " + idiomaOriginal + " " + situacao + " " + orcamento + " ");
+        System.out.print("[");
+        for(int i = 0; i < palavrasChave.size; i++){
+            System.out.print(palavrasChave[i]);
+        }
+        System.out.println("]");
     }
     
 
