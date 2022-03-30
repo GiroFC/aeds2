@@ -193,7 +193,6 @@ class Filme{
         }
         this.idiomaOriginal = removeTags(linha).trim();
 
-<<<<<<< HEAD
         while(!linha.contains("Situação")){
             linha = br.readLine();
         }
@@ -219,17 +218,6 @@ class Filme{
             this.palavrasChave[i] = aux[i];
         }
 
-=======
-        while(!br.readLine().contains("Orçamento"));
-        this.orcamento = Float.parseFloat(removeTags(br.readLine()));
-
-        int i = 0;
-        while(!br.readLine().contains("Keyword")){
-            this.palavrasChave[i] = removeTags(br.readLine());
-            i++;
-        }
-        
->>>>>>> 73f7ab78da40d85cb8b68b1cb528e797851533b2
 
         br.close();
     }
