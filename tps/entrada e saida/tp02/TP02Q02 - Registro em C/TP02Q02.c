@@ -24,14 +24,12 @@ typedef struct Filme{
 //construtor
 void Filme (Filme* s){
     strcpy(s->nome, "");
-    strcpy(s->idioma, "");
-    strcpy(s->formato, "");
-    strcpy(s->duracao, "");
-    strcpy(s->paisDeOrigem, "");
-    strcpy(s->emissora, "");
-    strcpy(s->transmissao, "");
-    s->numTemporadas = 0;
-    s->numEpisodios = 0;
+    strcpy(s->tituloOriginal, "");
+    s->duracao = 0;
+    strcpy(s->genero, "");
+    strcpy(s->idiomaOriginal, "");
+    strcpy(s->situacao, "");
+    s->orcamento = 0.0;
 }
 
 char* removeTags(char line[]){
@@ -51,84 +49,122 @@ char* removeTags(char line[]){
     return newline;
 }
 // strtsr == contains
-void ler(char nomeArquivo, Serie* x){
-    FILE *filme = fopen ("/tmp/series/","r");
+void ler(char nomeArquivo, Filme* x){
+    FILE *filme = fopen ("/tmp/filmes/","r");
     char linha[100];
     fgets(linha, 100, filme);
 
+
+    //Lendo o título
     while (!strstr(linha, "<title>")){
         fgets(linha, 100, filme);
     }
-    fgets(linha, 100, filme);
     strcpy(x->nome, removeTags(fgets(linha,100, filme)));
 
     fgets(linha, 100, filme);
+
+
+    //lendo a data
     while (!strstr(linha, "span class=\"release\"")){
         fgets(linha, 100, filme);
     }
-    strcpy(x->formato, removeTags(fgets(linha,100, filme)));
+    fgets(linha, 100, filme);
+    strcpy(x->dataLancamento, removeTags(fgets(linha,100, filme)));
 
     fgets(linha, 100, filme);
-    while (!strstr(linha, "Duração")){
+
+    //lendo os generos
+    while (!strstr(linha, "genres")){
         fgets(linha, 100, filme);
     }
+    fgets(linha, 100, filme);
+    fgets(linha, 100, filme);
+    strcpy(x->genero, removeTags(fgets(linha,100, filme)));
+
+    fgets(linha, 100, filme);
+
+    //lendo a duração
+    while (!strstr(linha, "runtime")){
+        fgets(linha, 100, filme);
+    }
+    fgets(linha, 100, filme);
+    fgets(linha, 100, filme);
     strcpy(x->duracao, removeTags(fgets(linha,100, filme)));
 
     fgets(linha, 100, filme);
-    while (!strstr(linha, "País de Origem")){
+
+    //lendo o Título Original
+    while (!strstr(linha, "<section class=\"facts left_column\">")){
         fgets(linha, 100, filme);
     }
-    strcpy(x->paisDeOrigem, removeTags(fgets(linha,100, filme)));
+    while (!strstr(linha, "<strong><bdi>Situação</bdi></strong>")){
+        fgets(linha, 100, filme);
+        if(strstr(linha, "Título original"){
+            fgets(linha, 100, filme);
+            strcpy(x->tituloOriginal, removeTags(fgets(linha,100, filme)));
+        }
+    }
+    if(x->tituloOriginal == ""){
+        x->tituloOriginal == x->nome;
+    }
+
+    //lendo situacao
+    strcpy(x->situacao, removeTags(fgets(linha,100, filme)));
 
     fgets(linha, 100, filme);
+
+    //lendo idioma
     while (!strstr(linha, "Idioma original")){
         fgets(linha, 100, filme);
     }
-    strcpy(x->idioma, removeTags(fgets(linha,100, filme)));
+    strcpy(x->idiomaOriginal, removeTags(fgets(linha,100, filme)));
 
     fgets(linha, 100, filme);
-    while (!strstr(linha, "Emissora de televisão original")){
+
+    //lendo orçamento
+    while (!strstr(linha, "Orçamento")){
         fgets(linha, 100, filme);
     }
-    strcpy(x->emissora, removeTags(fgets(linha,100, filme)));
+    if(strstr(linha, "<p><strong><bdi>Orçamento</bdi></strong> -</p>")){
+        removeTags(fgets(linha,100, filme);
+        x->orcamento = 0;
+    }else{
+        strcpy(x->orcamento, removeTags(fgets(linha,100, filme)));
+    }
+    
 
     fgets(linha, 100, filme);
-    while (!strstr(linha, "Transmissão original")){
+    while (!strstr(linha, "Palavras-chave")){
         fgets(linha, 100, filme);
     }
-    strcpy(x->transmissao, removeTags(fgets(linha,100, filme)));
-
+    linha = "";
     fgets(linha, 100, filme);
-    while (!strstr(linha, "N.º de temporadas")){
-        fgets(linha, 100, filme);
-    }
-    strcpy(x->numTemporadas, removeTags(fgets(linha,100, filme)));
-
     fgets(linha, 100, filme);
-    while (!strstr(linha, "N.º de episódios")){
-        fgets(linha, 100, filme);
+
+    if(strstr(linha, "Nenhuma palavra-chave foi adicionada.")){
+        strcpy(x->palavrasChave, removeTags(fgets(linha,100, filme)));
+    }else{
+        strcpy(x->numTemporadas, removeTags(fgets(linha,100, filme)));
     }
-    strcpy(x->numEpisodios, removeTags(fgets(linha,100, filme)));
 
     fclose(filme);
 }
 
-void imprimir(Serie *z){
+void imprimir(Filme *z){
     printf("%s %s %s %s %s %s %s %i %i", z->nome,z->formato,z->duracao,z->paisDeOrigem,z->idioma,z->emissora,z->transmissao,z->numTemporadas,z->numEpisodios);
 }
 
 
 
 bool isFim(char *s){
-    return (strlen(s) >= 3 && s[0] == 'F' &&
-        s[1] == 'I' && s[2] == 'M');
+    return (strlen(s) >= 3 && s[0] == 'F' && s[1] == 'I' && s[2] == 'M');
 }
 
 int main(){
     char entrada[1000][100];
     int numEntrada = 0;
-    Serie teste;
-    Series(&teste);
+    Filme teste;
+    Filme(&teste);
     // Leitura da entrada padrao
     do{
         scanf(" %[^\n]s", entrada[numEntrada]);
