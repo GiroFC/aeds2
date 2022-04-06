@@ -4,43 +4,35 @@
 #include <stdbool.h>
 
 typedef struct Date{
-    int dia;
-    int mes;
-    int ano;
+    char *dia;
+    char *mes;
+    char *ano;
 }Date;
 
 typedef struct Filme{
-     char nome[];
-     char tituloOriginal[];
-     Date dataDeLancamento[];
+     char *nome;
+     char *tituloOriginal;
+     Date dataDeLancamento;
      int duracao;
-     char genero[];
-     char idiomaOriginal[];
-     char situacao[];
+     char *genero;
+     char *idiomaOriginal;
+     char *situacao;
      float orcamento;
-     char palavrasChave[][];
+     char **palavrasChave;
 } Filme;
 
-//construtor
-void Filme (Filme* s){
-    strcpy(s->nome, "");
-    strcpy(s->tituloOriginal, "");
-    s->duracao = 0;
-    strcpy(s->genero, "");
-    strcpy(s->idiomaOriginal, "");
-    strcpy(s->situacao, "");
-    s->orcamento = 0.0;
-}
 
-char* removeTags(char line[]){
-    char newline = "";
+char removeTags(char line[]){
+    char newline[200];
     int i = 0;
+    int j = 0;
     while (i < strlen(line)){
         if(line[i] == '<'){
             i++;
             while(line[i] != '>')i++;
         }else{
-            newline += line[i];
+            newline[j] = line[i];
+            j++;
         }
         i++;
     }
@@ -48,9 +40,37 @@ char* removeTags(char line[]){
     
     return newline;
 }
+
+void trim(cha * s){
+    if(null == s){
+        return;
+    }
+    int n = 0;
+
+    for(int i = 0; i < strlen(S); ++i){
+        if(s[i] != ' ')
+            s[n++] = s[i]; 
+        
+    s[n] = '\0';
+    }
+}
+
+char ateParenteses(char * line){
+    char* nova = "";
+    for(int i = 0; i < strlen(line); i++){
+        if(line[i] != '('){
+            nova+=line[i];
+        } else { 
+            return nova;
+        }
+    }
+    return nova;
+        
+}
+
 // strtsr == contains
 void ler(char nomeArquivo, Filme* x){
-    FILE *filme = fopen ("/tmp/filmes/","r");
+    FILE *filme = fopen ("../tmp/filmes/","r");
     char linha[100];
     fgets(linha, 100, filme);
 
@@ -59,7 +79,7 @@ void ler(char nomeArquivo, Filme* x){
     while (!strstr(linha, "<title>")){
         fgets(linha, 100, filme);
     }
-    strcpy(x->nome, removeTags(fgets(linha,100, filme)));
+    strcpy(x->nome, trim(removeTags(fgets(linha,100, filme))));
 
     fgets(linha, 100, filme);
 
@@ -69,7 +89,18 @@ void ler(char nomeArquivo, Filme* x){
         fgets(linha, 100, filme);
     }
     fgets(linha, 100, filme);
-    strcpy(x->dataLancamento, removeTags(fgets(linha,100, filme)));
+    char dataString[20];
+    strcpy(dataString, trim(removeTags(fgets(linha,100, filme))));
+    char* aux [3];
+    aux[0] = strtok(dataString, /);
+    for(int i = 1; aux[i] != NULL; i++){
+        aux[i] = strtok(NULL, /);
+    }
+
+    Date data;
+    data->dia = aux[0];
+    data->dia = aux[1];
+    data->dia = aux[2];
 
     fgets(linha, 100, filme);
 
@@ -79,7 +110,7 @@ void ler(char nomeArquivo, Filme* x){
     }
     fgets(linha, 100, filme);
     fgets(linha, 100, filme);
-    strcpy(x->genero, removeTags(fgets(linha,100, filme)));
+    strcpy(x->genero, trim(removeTags(fgets(linha,100, filme))));
 
     fgets(linha, 100, filme);
 
@@ -89,7 +120,7 @@ void ler(char nomeArquivo, Filme* x){
     }
     fgets(linha, 100, filme);
     fgets(linha, 100, filme);
-    strcpy(x->duracao, removeTags(fgets(linha,100, filme)));
+    strcpy(x->duracao, trim(removeTags(fgets(linha,100, filme))));
 
     fgets(linha, 100, filme);
 
@@ -101,7 +132,7 @@ void ler(char nomeArquivo, Filme* x){
         fgets(linha, 100, filme);
         if(strstr(linha, "Título original"){
             fgets(linha, 100, filme);
-            strcpy(x->tituloOriginal, removeTags(fgets(linha,100, filme)));
+            strcpy(x->tituloOriginal, trim(removeTags(fgets(linha,100, filme))));
         }
     }
     if(x->tituloOriginal == ""){
@@ -117,7 +148,7 @@ void ler(char nomeArquivo, Filme* x){
     while (!strstr(linha, "Idioma original")){
         fgets(linha, 100, filme);
     }
-    strcpy(x->idiomaOriginal, removeTags(fgets(linha,100, filme)));
+    strcpy(x->idiomaOriginal, trim(removeTags(fgets(linha,100, filme))));
 
     fgets(linha, 100, filme);
 
@@ -129,7 +160,7 @@ void ler(char nomeArquivo, Filme* x){
         removeTags(fgets(linha,100, filme);
         x->orcamento = 0;
     }else{
-        strcpy(x->orcamento, removeTags(fgets(linha,100, filme)));
+        strcpy(x->orcamento, trim(removeTags(fgets(linha,100, filme))));
     }
     
 
@@ -142,16 +173,17 @@ void ler(char nomeArquivo, Filme* x){
     fgets(linha, 100, filme);
 
     if(strstr(linha, "Nenhuma palavra-chave foi adicionada.")){
-        strcpy(x->palavrasChave, removeTags(fgets(linha,100, filme)));
+        strcpy(x->palavrasChave, trim(removeTags(fgets(linha,100, filme))));
     }else{
-        strcpy(x->numTemporadas, removeTags(fgets(linha,100, filme)));
+        strcpy(x->numTemporadas, trim(removeTags(fgets(linha,100, filme))));
     }
 
     fclose(filme);
 }
 
+
 void imprimir(Filme *z){
-    printf("%s %s %s %s %s %s %s %i %i", z->nome,z->formato,z->duracao,z->paisDeOrigem,z->idioma,z->emissora,z->transmissao,z->numTemporadas,z->numEpisodios);
+    printf("%s %s %s %i %s %s %s %i %i", z->nome , z->tituloOriginal , z->dataLancamento->datacompleta , z->duracao , z->genero , z->idiomaOriginal , z->situacao , z->orcamento , z->palavrasChave);
 }
 
 
@@ -163,8 +195,7 @@ bool isFim(char *s){
 int main(){
     char entrada[1000][100];
     int numEntrada = 0;
-    Filme teste;
-    Filme(&teste);
+    Filme filme;
     // Leitura da entrada padrao
     do{
         scanf(" %[^\n]s", entrada[numEntrada]);
@@ -174,7 +205,8 @@ int main(){
     // Para cada linha de entrada, gerando uma de saida contendo o numero de letras
     // maiusculas da entrada
     for (int i = 0; i < numEntrada; i++){
-        
+        ler(entrada[i], filme);
+        imprimir(filme);
     }
     
     

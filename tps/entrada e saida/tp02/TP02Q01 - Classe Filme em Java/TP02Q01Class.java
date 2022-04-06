@@ -125,27 +125,27 @@ class Filme{
 
     //removendo tags html
     public String removeTags(String line){
-        String newline="";
+        String nova="";
         int i = 0;
         while(i<line.length()){
             if(line.charAt(i)== '<'){
                 i++;
                 while(line.charAt(i) != '>')i++;
             }else{
-                newline += line.charAt(i);
+                nova += line.charAt(i);
             }
             i++;
         }
-        newline = newline.replace("&nbsp;", " ");
-        newline = newline.replace("Título original", " ");
-        newline = newline.replace("Idioma original", " ");
-        newline = newline.replace("Situação", " ");
-        newline = newline.replace("(BR)", " ");
-        newline = newline.replace("Orçamento", " ");
-        newline = newline.replace("$", " ");
-        newline = newline.replace(",", "");
+        nova = nova.replace("&nbsp;", " ");
+        nova = nova.replace("Título original", " ");
+        nova = nova.replace("Idioma original", " ");
+        nova = nova.replace("Situação", " ");
+        nova = nova.replace("(BR)", " ");
+        nova = nova.replace("Orçamento", " ");
+        nova = nova.replace("$", " ");
+        nova = nova.replace(",", "");
 
-        return newline;
+        return nova;
     }
 
 
@@ -207,7 +207,10 @@ class Filme{
         while(!(linha=br.readLine()).contains("genres"));
         br.readLine();
         linha = br.readLine();
-        this.genero = removeTags(linha).trim();
+        linha = removeTags(linha.trim());
+        String auxi[];
+        auxi = linha.split(" ");
+        this.genero = palavraToStringNoSpace(auxi);
 
 
         //Lendo a duração
@@ -291,6 +294,26 @@ class Filme{
         return aux.replace("-", "");
     }
 
+    public String palavraToStringNoSpace(String s[]){
+        String aux = "";
+        int i = 0;
+        if(s[0].contains("Nenhuma palavra-chave foi adicionada.")){
+            aux = "";
+        }else{
+            for(; i < s.length - 1; i++){
+                aux+=s[i];
+                aux+=  ",";
+            }
+            aux+=s[i];
+        }
+        // for(; i < s.length - 2; i++){
+        //     aux+=s[i];
+        //     aux+=  ", ";
+        // }
+        // aux+=s[i];
+        return aux.replace("-", "");
+    }
+
     //clone
     public Filme clone(){
         Filme resp = new Filme();
@@ -308,7 +331,7 @@ class Filme{
 
     //imprimir
     public void Imprimir(){
-        MyIO.println(this.nome + " " + this.tituloOriginal + " " + sdf.format(this.dataDeLancamento) + " " + this.duracao + " " + this.genero + " " + this.idiomaOriginal + " " + this.situacao + " " + this.orcamento  + " [" + palavraToString(this.palavrasChave) + "]");
+        MyIO.println(this.nome + this.tituloOriginal + " " + sdf.format(this.dataDeLancamento) + " " + this.duracao + " " + this.genero + " " + this.idiomaOriginal + " " + this.situacao + " " + this.orcamento  + " [" + palavraToString(this.palavrasChave) + "]");
     }
     
 
@@ -324,7 +347,7 @@ public class TP02Q01Class{
         public static void main(String[] args) throws Exception{
             String[] input = new String[1000];
             int numInput = 0;
-    
+            MyIO.setCharset("UTF-8");
             do{
                 input[numInput] = MyIO.readLine();
             }while(isFim(input[numInput++]) == false);
@@ -334,7 +357,7 @@ public class TP02Q01Class{
     
             for(int i = 0; i < numInput;i++){
                 filmes[i] = new Filme();
-                filmes[i].ler("../tmp/filmes/"+input[i]);
+                filmes[i].ler("/tmp/filmes/"+input[i]);
                 filmes[i].Imprimir();
                 
             }
