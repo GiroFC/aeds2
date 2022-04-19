@@ -4,7 +4,6 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-
 class Filme{
 
     //atributos privados
@@ -341,10 +340,12 @@ class Filme{
 
 public class TP02Q03{
 
-    public static boolean pesquisaSequencial(String entrada[], String nomeP){
+    public static boolean pesquisaSequencial(Filme entrada[], String nomeP){
         boolean resp = false;
-        for(int i = 0; i <= 30; i++){
-            if(entrada[i].compareTo(nomeP) == 0){
+        for(int i = 0; i < entrada.length; i++){
+            // System.out.println(entrada[i].getNome());
+            // System.out.println(nomeP);
+            if(((entrada[i].getNome()).trim()).equals(nomeP) == true){
                 resp = true;
                 return resp;
             }else{
@@ -372,21 +373,21 @@ public class TP02Q03{
         }while(isFim(input[numInput++]) == false);
         numInput--;//Desconsiderar a palavra FIM
             
+        Filme[] filmes = new Filme[numInput];
     
         //lendo o arquivo dos filmes
         for(int i = 0; i < numInput;i++){
-            input[i] = input[i].replace(".html", "");
-            input[i] = input[i].replace("_", " ");
             // System.out.println(input[i]);
-            // filmes[i] = new Filme();
-            // filmes[i].ler("../tmp/filmes/"+input[i]);
+            filmes[i] = new Filme();
+            filmes[i].ler("../tmp/filmes/"+input[i]);
             // filmes[i].Imprimir();
         }
 
         //lendo o nome para a verificação
         String nomeP = MyIO.readLine();
+
         while(nomeP.compareTo("FIM") != 0){
-            if(pesquisaSequencial(input, nomeP) == true){
+            if(pesquisaSequencial(filmes, nomeP) == true){
                 System.out.println("SIM");
             } else{
                System.out.println("NÃO");
