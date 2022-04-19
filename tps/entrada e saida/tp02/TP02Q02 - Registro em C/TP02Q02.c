@@ -9,6 +9,7 @@
 #include <string.h>
 #include <stdbool.h>
 
+<<<<<<< Updated upstream
 // -------------------------------------------------------------------------------- //
 // Definitions
 #define MAX_MOVIES          100
@@ -74,6 +75,49 @@ char *substring(char *string, int position, int length) {
     }
     *(p+c) = '\0';
     return p;
+=======
+typedef struct Date{
+    int dia;
+    int mes;
+    int ano;
+}Date;
+
+typedef struct Filme{
+     char nome[];
+     char tituloOriginal[];
+     Date dataDeLancamento[];
+     int duracao;
+     char genero[];
+     char idiomaOriginal[];
+     char situacao[];
+     float orcamento;
+     char palavrasChave[][];
+} Filme;
+
+void trim(cha * s){
+    if(null == s){
+        return;
+    }
+    int n = 0;
+
+    for(int i = 0; i < strlen(S); ++i){
+        if(s[i] != ' ')
+            s[n++] = s[i]; 
+        
+    s[n] = '\0';
+    }
+}
+
+//construtor
+void Filme (Filme* s){
+    strcpy(s->nome, "");
+    strcpy(s->tituloOriginal, "");
+    s->duracao = 0;
+    strcpy(s->genero, "");
+    strcpy(s->idiomaOriginal, "");
+    strcpy(s->situacao, "");
+    s->orcamento = 0.0;
+>>>>>>> Stashed changes
 }
 
 void str_replace(char *target, const char *needle, const char *replacement) {
@@ -102,6 +146,29 @@ int firstDigit(const char *str, int start) {
     for(int i = start; i != strlen(str); i++) if(str[i] >= '0' && str[i] <= '9') return i;
     return -1;
 }
+<<<<<<< Updated upstream
+=======
+
+char ateParenteses(char * line){
+        char* nova = "";
+        for(int i = 0; i < strlen(line); i++){
+            if(line[i] != '('){
+                nova+=line[i];
+            } else { 
+                return nova;
+            }
+        }
+        return nova;
+        
+    }
+
+
+// strtsr == contains
+void ler(char nomeArquivo, Filme* x){
+    FILE *filme = fopen ("/tmp/filmes/","r");
+    char linha[100];
+    fgets(linha, 100, filme);
+>>>>>>> Stashed changes
 
 // Remove tags 
 char *extractOnlyText(char *html, char *text) {
@@ -145,8 +212,12 @@ void movie_print(Movie *movie) {
         if(i == movie -> count_keywords - 1) printf("%s]\n", movie -> keywords[i]);
         else printf("%s, ", movie -> keywords[i]);
     }
+<<<<<<< Updated upstream
     if(movie -> count_keywords == 0) printf("]\n");
 }
+=======
+    strcpy(x->nome, trim(removeTags(fgets(linha,100, filme))));
+>>>>>>> Stashed changes
 
 void movie_readHtml(char *filename) {
     FILE *html_file;
@@ -156,10 +227,31 @@ void movie_readHtml(char *filename) {
 
     html_file = fopen(filename, "r");
 
+<<<<<<< Updated upstream
     if(html_file == NULL) exit(EXIT_FAILURE);
+=======
+    //lendo a data
+    while (!strstr(linha, "span class=\"release\"")){
+        fgets(linha, 100, filme);
+    }
+    fgets(linha, 100, filme);
+    char dataString[20];
+    strcpy(dataString, trim(removeTags(fgets(linha,100, filme))));
+    char* aux [3];
+    aux[0] = strtok(dataString, /);
+    for(int i = 1; aux[i] != NULL; i++){
+        aux[i] = strtok(NULL, /);
+    }
+
+    Date data;
+    data->dia = aux[0];
+    data->dia = aux[1];
+    data->dia = aux[2];
+>>>>>>> Stashed changes
 
     // ------------------------------------ //
 
+<<<<<<< Updated upstream
     // Creating movie variables
     char *name = NULL, 
     *original_title = NULL,
@@ -167,18 +259,38 @@ void movie_readHtml(char *filename) {
     *original_language = NULL,
     *situation = NULL,
     *keywords = NULL;
+=======
+    //lendo os generos
+    while (!strstr(linha, "genres")){
+        fgets(linha, 100, filme);
+    }
+    fgets(linha, 100, filme);
+    fgets(linha, 100, filme);
+    strcpy(x->genero, trim(removeTags(fgets(linha,100, filme))));
+>>>>>>> Stashed changes
 
     Date release_date;
 
+<<<<<<< Updated upstream
     release_date.day = 0;
     int duration = -1;
     float budget = -1;
+=======
+    //lendo a duração
+    while (!strstr(linha, "runtime")){
+        fgets(linha, 100, filme);
+    }
+    fgets(linha, 100, filme);
+    fgets(linha, 100, filme);
+    strcpy(x->duracao, trim(removeTags(fgets(linha,100, filme))));
+>>>>>>> Stashed changes
 
     // ------------------------------------ //
     
     // Read HTML line by line
     while((read = getline(&line_html, &len, html_file)) != -1) {
 
+<<<<<<< Updated upstream
         // --------------------------- //
         // Find movie name
         if(name == NULL) {
@@ -188,6 +300,17 @@ void movie_readHtml(char *filename) {
                 str_replace(movies[count_movies].name, "&#8212;", "—");
                 movies[count_movies].name[strlen(movies[count_movies].name) - 46] = '\0';
             }
+=======
+    //lendo o Título Original
+    while (!strstr(linha, "<section class=\"facts left_column\">")){
+        fgets(linha, 100, filme);
+    }
+    while (!strstr(linha, "<strong><bdi>Situação</bdi></strong>")){
+        fgets(linha, 100, filme);
+        if(strstr(linha, "Título original"){
+            fgets(linha, 100, filme);
+            strcpy(x->tituloOriginal, trim(removeTags(fgets(linha,100, filme))));
+>>>>>>> Stashed changes
         }
 
         // --------------------------- //
@@ -216,6 +339,7 @@ void movie_readHtml(char *filename) {
             }
         }
 
+<<<<<<< Updated upstream
         // --------------------------- //
         // Find movie duration
         if(duration == -1) {
@@ -232,6 +356,13 @@ void movie_readHtml(char *filename) {
                 movies[count_movies].duration = duration;
             }
         }
+=======
+    //lendo idioma
+    while (!strstr(linha, "Idioma original")){
+        fgets(linha, 100, filme);
+    }
+    strcpy(x->idiomaOriginal, trim(removeTags(fgets(linha,100, filme))));
+>>>>>>> Stashed changes
 
         // -------------------------- //
         // Find movie genres
@@ -246,6 +377,7 @@ void movie_readHtml(char *filename) {
             }
         }
 
+<<<<<<< Updated upstream
         // --------------------------- //
         // Find movie original language
         if(original_language == NULL) {
@@ -265,6 +397,33 @@ void movie_readHtml(char *filename) {
                 strcpy(movies[count_movies].situation, situation);
             }
         }
+=======
+    //lendo orçamento
+    while (!strstr(linha, "Orçamento")){
+        fgets(linha, 100, filme);
+    }
+    if(strstr(linha, "<p><strong><bdi>Orçamento</bdi></strong> -</p>")){
+        removeTags(fgets(linha,100, filme);
+        x->orcamento = 0;
+    }else{
+        strcpy(x->orcamento, trim(removeTags(fgets(linha,100, filme))));
+    }
+    
+
+    fgets(linha, 100, filme);
+    while (!strstr(linha, "Palavras-chave")){
+        fgets(linha, 100, filme);
+    }
+    linha = "";
+    fgets(linha, 100, filme);
+    fgets(linha, 100, filme);
+
+    if(strstr(linha, "Nenhuma palavra-chave foi adicionada.")){
+        strcpy(x->palavrasChave, trim(removeTags(fgets(linha,100, filme))));
+    }else{
+        strcpy(x->numTemporadas, trim(removeTags(fgets(linha,100, filme))));
+    }
+>>>>>>> Stashed changes
 
         // --------------------------- //
         // Find movie budget
