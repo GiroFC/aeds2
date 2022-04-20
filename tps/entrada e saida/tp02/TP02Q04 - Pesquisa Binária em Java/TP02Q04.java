@@ -520,13 +520,35 @@ class Lista {
         boolean resp = false;
         for(int i = 0; i < n; i++){
             comparacoes++;
-            // System.out.println(array[i].getNome());
+            // System.out.println(entrada[i].getNome());
             // System.out.println(nomeP);
             if(((array[i].getNome()).trim()).equals(nomeP) == true){
                 resp = true;
                 i = n;
             }else{
                 resp = false;
+            }
+        }
+        return resp;
+    }
+
+    public boolean pesquisaBinaria(String nomeP){
+        boolean resp = false;
+        int dir = n, esq = 0, meio;
+        
+        while(esq < dir){
+            comparacoes++;
+            meio = (esq + dir) / 2;
+            
+            // System.out.println(array[meio].getNome());
+            // System.out.println(nomeP);
+            if(nomeP.equals((array[meio].getNome()).trim()) == true){
+                resp = true;
+                esq = dir;
+            }else if(nomeP.compareTo((array[meio].getNome()).trim()) > 0){ 
+                esq = meio + 1;
+            } else{
+                dir = meio - 1;
             }
         }
         return resp;
@@ -543,7 +565,8 @@ class Lista {
  
 
 
-public class TP02Q03{
+
+public class TP02Q04{
 
     public static int contador = 0; 
 
@@ -564,7 +587,7 @@ public class TP02Q03{
 
         inicio = now();
 
-        OutputStream os = new FileOutputStream("matricula_binaria.txt"); // nome do arquivo que será escrito
+        OutputStream os = new FileOutputStream("matricula_sequencial.txt"); // nome do arquivo que será escrito
         Writer wr = new OutputStreamWriter(os); // criação de um escritor
         BufferedWriter br = new BufferedWriter(wr); // adiciono a um escritor de buffer
 
@@ -578,7 +601,7 @@ public class TP02Q03{
         //lendo o arquivo dos filmes
         for(int i = 0; i < numInput;i++){
             Filme aux = new Filme();
-            aux.ler("../tmp/filmes/"+input[i]);
+            aux.ler("/tmp/filmes/"+input[i]);
             lista.inserirFim(aux);
             // filmes[i].Imprimir();
         }
