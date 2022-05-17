@@ -561,30 +561,119 @@ class Pilha {
         }
     }
 
-    public void swap(int i, int j) {
-        Filme temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-    
+    //seleção
     public void selectionSort() {
         for (int i = 0; i < (n - 1); i++) {
             int menor = i;
             for (int j = (i + 1); j < n; j++){
                if (array[menor].getTituloOriginal().compareTo(array[j].getTituloOriginal()) > 0 ){ 
-                 TP03Q01.contador++; 
+                 TP03Q05.contador++; 
                  menor = j;
                }
             }
             swap(menor, i);
          }
      }
+
+     //inserçao
+     public void insertionSort() {
+        for (int i = 1; i < n; i++) {
+            Filme tmp = array[i];
+            int j = i - 1;
+            while ((j >= 0) && (array[j].getDataDeLancamento().compareTo(tmp.getDataDeLancamento()) > 0)) {
+                TP03Q05.contador++;
+                array[j + 1] = array[j];
+                j--;
+            } 
+            while ((j >= 0) && (array[j].getDataDeLancamento().compareTo(tmp.getDataDeLancamento()) == 0) && (array[j].getNome().compareTo(tmp.getNome()) > 0)) {
+                array[j + 1] = array[j];
+                TP03Q05.contador++;
+                j--;
+            } 
+            TP03Q05.contador++;
+            array[j + 1] = tmp;
+        }
+     }
+
+     //heap
+     public void heapSort() {
+        // Alterar o vetor ignorando a posicao zero
+        Filme[] tmp = new Filme[n + 1];
+        for (int i = 0; i < n; i++) {
+            TP03Q05.contador++;
+            tmp[i + 1] = array[i];
+        }
+        array = tmp;
+
+        // Contrucao do heap
+        for (int tamHeap = 2; tamHeap <= n; tamHeap++) {
+            TP03Q05.contador++;
+            construir(tamHeap);
+        }
+
+        // Ordenacao propriamente dita
+        int tamHeap = n;
+        while (tamHeap > 1) {
+            TP03Q05.contador++;
+            swap(1, tamHeap--);
+            reconstruir(tamHeap);
+        }
+
+        // Alterar o vetor para voltar a posicao zero
+        tmp = array;
+        array = new Filme[n];
+        for (int i = 0; i < n; i++) {
+            TP03Q05.contador++;
+            array[i] = tmp[i + 1];
+        }
+    }
+
+    public void construir(int tamHeap) {
+        for (int i = tamHeap; i > 1 && ((array[i].getGenero().compareTo(array[i / 2].getGenero()) > 0) || ((array[i].getGenero().compareTo(array[i / 2].getGenero()) == 0)&& (array[i].getNome().compareTo(array[i / 2].getNome()) > 0))); i /= 2) { 
+            TP03Q05.contador++;
+            swap(i, i / 2);
+        }
+    }
+
+    public void reconstruir(int tamHeap) {
+        int i = 1;
+        while (i <= (tamHeap / 2)) {
+            int filho = getMaiorFilho(i, tamHeap);
+            if (array[i].getGenero().compareTo(array[filho].getGenero()) < 0) {
+                TP03Q05.contador++;
+                swap(i, filho);
+                i = filho;
+            } else {
+                TP03Q05.contador++;
+                i = tamHeap;
+            }
+        }
+    }
+
+    public int getMaiorFilho(int i, int tamHeap) {
+        int filho;
+        if (2 * i == tamHeap || array[2 * i].getGenero().compareTo(array[2 * i + 1].getGenero()) > 0) {
+            TP03Q05.contador++;
+            filho = 2 * i;
+        }else {
+            TP03Q05.contador++;
+            filho = 2 * i + 1;
+        }
+        return filho;
+    }
+
+    public void swap(int i, int primeiro) {
+        Filme aux = array[i];
+        TP03Q05.contador++;
+        array[i] = array[primeiro];
+        array[primeiro] = aux;
+    }
  }
 
 
 
 
-public class TP03Q01{
+public class TP03Q05{
 
     public static int contador = 0; 
 
@@ -606,7 +695,7 @@ public class TP03Q01{
 
         inicio = now();
 
-        OutputStream os = new FileOutputStream("matricula_binaria.txt"); // nome do arquivo que será escrito
+        OutputStream os = new FileOutputStream("matricula heapsor.txt"); // nome do arquivo que será escrito
         Writer wr = new OutputStreamWriter(os); // criação de um escritor
         BufferedWriter br = new BufferedWriter(wr); // adiciono a um escritor de buffer
 
@@ -620,12 +709,12 @@ public class TP03Q01{
         //lendo o arquivo dos filmes
         for(int i = 0; i < numInput;i++){
             Filme aux = new Filme();
-            aux.ler("/tmp/filmes/"+input[i]);
+            aux.ler("../tmp/filmes/"+input[i]);
             pilha.inserir(aux);
             // filmes[i].Imprimir();
         }
 
-        pilha.selectionSort();
+        pilha.heapSort();
         pilha.imprimirA();
         fim = now();
         diferenca = (fim - inicio) / 1000.0;

@@ -572,19 +572,38 @@ class Pilha {
             int menor = i;
             for (int j = (i + 1); j < n; j++){
                if (array[menor].getTituloOriginal().compareTo(array[j].getTituloOriginal()) > 0 ){ 
-                 TP03Q01.contador++; 
+                 TP03Q03.contador++; 
                  menor = j;
                }
             }
             swap(menor, i);
          }
      }
+
+     public void insertionSort() {
+        for (int i = 1; i < n; i++) {
+            Filme tmp = array[i];
+            int j = i - 1;
+            while ((j >= 0) && (array[j].getDataDeLancamento().compareTo(tmp.getDataDeLancamento()) > 0)) {
+                TP03Q03.contador++;
+                array[j + 1] = array[j];
+                j--;
+            } 
+            while ((j >= 0) && (array[j].getDataDeLancamento().compareTo(tmp.getDataDeLancamento()) == 0) && (array[j].getNome().compareTo(tmp.getNome()) > 0)) {
+                array[j + 1] = array[j];
+                TP03Q03.contador++;
+                j--;
+            } 
+            TP03Q03.contador++;
+            array[j + 1] = tmp;
+        }
+     }
  }
 
 
 
 
-public class TP03Q01{
+public class TP03Q03{
 
     public static int contador = 0; 
 
@@ -606,7 +625,7 @@ public class TP03Q01{
 
         inicio = now();
 
-        OutputStream os = new FileOutputStream("matricula_binaria.txt"); // nome do arquivo que será escrito
+        OutputStream os = new FileOutputStream("matricula_insercao.txt"); // nome do arquivo que será escrito
         Writer wr = new OutputStreamWriter(os); // criação de um escritor
         BufferedWriter br = new BufferedWriter(wr); // adiciono a um escritor de buffer
 
@@ -625,7 +644,7 @@ public class TP03Q01{
             // filmes[i].Imprimir();
         }
 
-        pilha.selectionSort();
+        pilha.insertionSort();
         pilha.imprimirA();
         fim = now();
         diferenca = (fim - inicio) / 1000.0;
