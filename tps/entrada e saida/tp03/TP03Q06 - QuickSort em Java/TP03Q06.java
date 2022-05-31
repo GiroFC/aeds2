@@ -5,8 +5,6 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.*;
-import java.lang.Math;
-
 class Filme{
 
     //atributos privados
@@ -157,14 +155,11 @@ class Filme{
         String minuto = "";
         int minutosTotais;
 
-        if(s.contains("h") && s.contains("m")){
+        if(s.contains("h")){
             aux = s.split("h");
             minuto = aux[1].substring(0, aux[1].length() - 1).trim();
             minutosTotais = (Integer.parseInt(aux[0].trim()) * 60) + (Integer.parseInt(minuto));
-        } else if(s.contains("m") == false){
-            s = s.replace("h", " ");
-            minutosTotais = ((Integer.parseInt(s.trim())) * 60);
-        } else{
+        }else{
             minuto += s.trim();
             minuto = minuto.replace("m", " ");
             
@@ -336,7 +331,7 @@ class Filme{
 
     //imprimir
     public void Imprimir(){
-        MyIO.println(this.nome + this.tituloOriginal + " " + sdf.format(this.dataDeLancamento) + " " + this.duracao + " " + this.genero + " " + this.idiomaOriginal + " " + this.situacao + " " + this.orcamento  + " [" + palavraToString(this.palavrasChave) + "]");
+        MyIO.println(this.nome + (this.tituloOriginal).trim() + " " + sdf.format(this.dataDeLancamento) + " " + this.duracao + " " + this.genero + " " + this.idiomaOriginal + " " + this.situacao + " " + this.orcamento  + " [" + palavraToString(this.palavrasChave) + "]");
     }
     
 
@@ -344,134 +339,375 @@ class Filme{
 }
 
 /**
- * Fila estatica
+ * Lista estatica
  * @author Max do Val Machado
  * @version 2 01/2015
  */
-class Fila {
+class Pilha {
     private Filme[] array;
-    private int primeiro; // Remove do indice "primeiro".
-    private int ultimo; // Insere no indice "ultimo".
- 
- 
+    private int n;
 
-    public void getPU(){
-        System.out.println(ultimo+ " "+ primeiro);
+    public int getN(){
+        return this.n;
     }
-
-    public int mediaDuracao(){
-        int totalDuracao = 0;
-        double total = 0.0;
-        int totalInt = 0;
-        for(int i = primeiro; i != ultimo; i = ((i + 1) % array.length)){
-            totalDuracao+=(array[i].getDuracao());
-        }
-        total = ((totalDuracao))/((contador()));
-        totalInt = (int)(Math.ceil(total));
-        return totalInt;
-    }
+ 
     /**
      * Construtor da classe.
      */
-    public Fila () {
+    public Pilha () {
        this(6);
     }
  
  
     /**
      * Construtor da classe.
-     * @param tamanho Tamanho da fila.
+     * @param tamanho Tamanho da lista.
      */
-    public Fila (int tamanho){
-       array = new Filme[tamanho+1];
-       primeiro = ultimo = 0;
+    public Pilha (int tamanho){
+       array = new Filme[tamanho];
+       n = 0;
     }
  
  
     /**
-     * Insere um elemento na ultima posicao da fila.
+     * Insere um elemento na primeira posicao da lista e move os demais
+     * elementos para o fim da lista.
      * @param x int elemento a ser inserido.
-     * @throws Exception Se a fila estiver cheia.
+     * @throws Exception Se a lista estiver cheia.
+     */
+    // public void inserirInicio(Filme x) throws Exception {
+ 
+    //    //validar insercao
+    //    if(n >= array.length){
+    //       throw new Exception("Erro ao inserir!");
+    //    } 
+ 
+    //    //levar elementos para o fim do array
+    //    for(int i = n; i > 0; i--){
+    //       array[i] = array[i-1];
+    //    }
+ 
+    //    array[0] = x;
+    //    n++;
+    // }
+ 
+ 
+    /**
+     * Insere um elemento na ultima posicao da lista.
+     * @param x int elemento a ser inserido.
+     * @throws Exception Se a lista estiver cheia.
      */
     public void inserir(Filme x) throws Exception {
  
        //validar insercao
-       if (((ultimo + 1) % array.length) == primeiro) {
-          remover();
+       if(n >= array.length){
+          throw new Exception("Erro ao inserir!");
        }
  
-       array[ultimo] = x;
-       ultimo = (ultimo + 1) % array.length;
+       array[n] = x;
+       n++;
     }
  
  
     /**
-     * Remove um elemento da primeira posicao da fila e movimenta 
-     * os demais elementos para o primeiro da mesma.
+     * Insere um elemento em uma posicao especifica e move os demais
+     * elementos para o fim da lista.
+     * @param x int elemento a ser inserido.
+     * @param pos Posicao de insercao.
+     * @throws Exception Se a lista estiver cheia ou a posicao invalida.
+     */
+    // public void inserir(Filme x, int pos) throws Exception {
+ 
+    //    //validar insercao
+    //    if(n >= array.length || pos < 0 || pos > n){
+    //       throw new Exception("Erro ao inserir!");
+    //    }
+ 
+    //    //levar elementos para o fim do array
+    //    for(int i = n; i > pos; i--){
+    //       array[i] = array[i-1];
+    //    }
+ 
+    //    array[pos] = x;
+    //    n++;
+    // }
+ 
+ 
+    /**
+     * Remove um elemento da primeira posicao da lista e movimenta 
+     * os demais elementos para o inicio da mesma.
      * @return resp int elemento a ser removido.
-     * @throws Exception Se a fila estiver vazia.
+     * @throws Exception Se a lista estiver vazia.
+     */
+    // public Filme removerInicio() throws Exception {
+ 
+    //    //validar remocao
+    //    if (n == 0) {
+    //       throw new Exception("Erro ao remover!");
+    //    }
+ 
+    //    Filme resp = array[0];
+    //    n--;
+ 
+    //    for(int i = 0; i < n; i++){
+    //       array[i] = array[i+1];
+    //    }
+ 
+    //    return resp;
+    // }
+ 
+ 
+    /**
+     * Remove um elemento da ultima posicao da lista.
+     * @return resp int elemento a ser removido.
+     * @throws Exception Se a lista estiver vazia.
      */
     public Filme remover() throws Exception {
  
        //validar remocao
-       if (primeiro == ultimo) {
+       if (n == 0) {
           throw new Exception("Erro ao remover!");
        }
  
-       Filme resp = array[primeiro];
-       primeiro = (primeiro + 1) % array.length;
-       return resp;
+       return array[--n];
     }
  
-
-    public int contador (){
-        int totalElementos = 0;
-  
-        for(int i = primeiro; i != ultimo; i = ((i + 1) % array.length)) {
-           totalElementos++;
-        }
-        return totalElementos;
-     }
  
     /**
-     * Mostra os array separados por espacos.
+     * Remove um elemento de uma posicao especifica da lista e 
+     * movimenta os demais elementos para o inicio da mesma.
+     * @param pos Posicao de remocao.
+     * @return resp int elemento a ser removido.
+     * @throws Exception Se a lista estiver vazia ou a posicao for invalida.
      */
-    public void mostrar (){
-       System.out.print("[ ");
+    // public Filme remover(int pos) throws Exception {
  
-       for(int i = primeiro; i != ultimo; i = ((i + 1) % array.length)) {
+    //    //validar remocao
+    //    if (n == 0 || pos < 0 || pos >= n) {
+    //       throw new Exception("Erro ao remover!");
+    //    }
+ 
+    //    Filme resp = array[pos];
+    //    n--;
+ 
+    //    for(int i = pos; i < n; i++){
+    //       array[i] = array[i+1];
+    //    }
+ 
+    //    return resp;
+    // }
+ 
+ 
+    /**
+     * Mostra os elementos da lista separados por espacos.
+     */
+    public void mostrar(){
+       System.out.print("[ ");
+       for(int i = 0; i < n; i++){
           System.out.print(array[i] + " ");
        }
- 
        System.out.println("]");
     }
  
-    public void mostrarRec(){
-       mostrarRec(primeiro);
-    }
- 
-    public void mostrarRec(int i){
-       if(i != ultimo){
-          array[i].Imprimir();
-          mostrarRec((i + 1) % array.length);
-       }
-    }
- 
  
     /**
-     * Retorna um boolean indicando se a fila esta vazia
-     * @return boolean indicando se a fila esta vazia
+     * Procura um elemento e retorna se ele existe.
+     * @param x int elemento a ser pesquisado.
+     * @return <code>true</code> se o array existir,
+     * <code>false</code> em caso contrario.
      */
-    public boolean isVazia() {
-       return (primeiro == ultimo); 
+
+    public int comparacoes = 0;
+    public boolean pesquisaSequencial(String nomeP){
+        boolean resp = false;
+        for(int i = 0; i < n; i++){
+            // System.out.println(entrada[i].getNome());
+            // System.out.println(nomeP);
+            if(((array[i].getNome()).trim()).equals(nomeP) == true){
+                resp = true;
+                i = n;
+            }else{
+                resp = false;
+            }
+        }
+        return resp;
+    }
+
+    public boolean pesquisaBinaria(String nomeP){
+        boolean resp = false;
+        int dir = n, esq = 0, meio;
+        
+        while(esq < dir){
+            meio = (esq + dir) / 2;
+            
+            // System.out.println(array[meio].getNome());
+            // System.out.println(nomeP);
+            if(nomeP.equals((array[meio].getNome()).trim()) == true){
+                resp = true;
+                esq = dir;
+            }else if(nomeP.compareTo((array[meio].getNome()).trim()) > 0){ 
+                esq = meio + 1;
+            } else{
+                dir = meio - 1;
+            }
+        }
+        return resp;
+    }
+
+    public void imprimirA(){
+        for(int i = 0; i < n; i++){
+            array[i].Imprimir();
+            
+        }
+    }
+
+    //seleção
+    public void selectionSort() {
+        for (int i = 0; i < (n - 1); i++) {
+            int menor = i;
+            for (int j = (i + 1); j < n; j++){
+               if (array[menor].getTituloOriginal().compareTo(array[j].getTituloOriginal()) > 0 ){ 
+                 TP03Q06.contador++; 
+                 menor = j;
+               }
+            }
+            swap(menor, i);
+         }
+     }
+
+     //inserçao
+     public void insertionSort() {
+        for (int i = 1; i < n; i++) {
+            Filme tmp = array[i];
+            int j = i - 1;
+            while ((j >= 0) && (array[j].getDataDeLancamento().compareTo(tmp.getDataDeLancamento()) > 0)) {
+                TP03Q06.contador++;
+                array[j + 1] = array[j];
+                j--;
+            } 
+            while ((j >= 0) && (array[j].getDataDeLancamento().compareTo(tmp.getDataDeLancamento()) == 0) && (array[j].getNome().compareTo(tmp.getNome()) > 0)) {
+                array[j + 1] = array[j];
+                TP03Q06.contador++;
+                j--;
+            } 
+            TP03Q06.contador++;
+            array[j + 1] = tmp;
+        }
+     }
+
+     //heap
+     public void heapSort() {
+        // Alterar o vetor ignorando a posicao zero
+        Filme[] tmp = new Filme[n + 1];
+        for (int i = 0; i < n; i++) {
+            TP03Q06.contador++;
+            tmp[i + 1] = array[i];
+        }
+        array = tmp;
+
+        // Contrucao do heap
+        for (int tamHeap = 2; tamHeap <= n; tamHeap++) {
+            TP03Q06.contador++;
+            construir(tamHeap);
+        }
+
+        // Ordenacao propriamente dita
+        int tamHeap = n;
+        while (tamHeap > 1) {
+            TP03Q06.contador++;
+            swap(1, tamHeap--);
+            reconstruir(tamHeap);
+        }
+
+        // Alterar o vetor para voltar a posicao zero
+        tmp = array;
+        array = new Filme[n];
+        for (int i = 0; i < n; i++) {
+            TP03Q06.contador++;
+            array[i] = tmp[i + 1];
+        }
+    }
+
+    public void construir(int tamHeap) {
+        for (int i = tamHeap; i > 1 && ((array[i].getGenero().compareTo(array[i / 2].getGenero()) > 0) || ((array[i].getGenero().compareTo(array[i / 2].getGenero()) == 0)&& (array[i].getNome().compareTo(array[i / 2].getNome()) > 0))); i /= 2) { 
+            TP03Q06.contador++;
+            swap(i, i / 2);
+        }
+    }
+
+    public void reconstruir(int tamHeap) {
+        int i = 1;
+        while (i <= (tamHeap / 2)) {
+            int filho = getMaiorFilho(i, tamHeap);
+            if (array[i].getGenero().compareTo(array[filho].getGenero()) < 0) {
+                TP03Q06.contador++;
+                swap(i, filho);
+                i = filho;
+            } else {
+                TP03Q06.contador++;
+                i = tamHeap;
+            }
+        }
+    }
+
+    public int getMaiorFilho(int i, int tamHeap) {
+        int filho;
+        if (2 * i == tamHeap || array[2 * i].getGenero().compareTo(array[2 * i + 1].getGenero()) > 0) {
+            TP03Q06.contador++;
+            filho = 2 * i;
+        }else {
+            TP03Q06.contador++;
+            filho = 2 * i + 1;
+        }
+        return filho;
+    }
+
+    public void swap(int i, int primeiro) {
+        Filme aux = array[i];
+        TP03Q06.contador++;
+        array[i] = array[primeiro];
+        array[primeiro] = aux;
+    }
+
+    public void quicksort() {
+        quicksort(0, n - 1);
+    }
+
+    private void quicksort(int esq, int dir) {      
+        int i = esq, j = dir;
+        Filme pivo = array[(dir + esq) / 2];
+        while (i <= j) {
+            TP03Q06.contador++;
+            while ((array[i].getSituacao().compareTo(pivo.getSituacao()) < 0) || ((array[i].getSituacao().compareTo(pivo.getSituacao()) == 0) && (array[i].getNome().compareTo(pivo.getNome()) < 0)))
+                i++;
+            while ((array[j].getSituacao().compareTo(pivo.getSituacao()) > 0) || ((array[j].getSituacao().compareTo(pivo.getSituacao()) == 0) && (array[j].getNome().compareTo(pivo.getNome()) > 0)))
+                j--;
+            
+            if (i <= j) {
+                TP03Q06.contador++;
+                swap(i, j);
+                i++;
+                j--;
+            }
+        }
+        if (esq < j){
+            TP03Q06.contador++;
+            quicksort(esq, j);
+        }
+        if (i < dir){
+            TP03Q06.contador++;
+            quicksort(i, dir);
+        }
+        
+        
     }
 
  }
- 
 
 
 
-public class TP02Q07{
+
+public class TP03Q06{
 
     public static int contador = 0; 
 
@@ -486,60 +722,41 @@ public class TP02Q07{
     public static void main(String[] args) throws Exception{
         String[] input = new String[1000];
         int numInput = 0;
+        long inicio=0, fim=0;
+        double diferenca = 0.0;
         MyIO.setCharset("UTF-8");
+
+
+        inicio = now();
+
+        OutputStream os = new FileOutputStream("matricula-quicksort.txt"); // nome do arquivo que será escrito
+        Writer wr = new OutputStreamWriter(os); // criação de um escritor
+        BufferedWriter br = new BufferedWriter(wr); // adiciono a um escritor de buffer
 
         do{
             input[numInput] = MyIO.readLine();
         }while(isFim(input[numInput++]) == false);
         numInput--;//Desconsiderar a palavra FIM
             
-        Fila fila = new Fila(5);
+        Pilha pilha = new Pilha(100);
     
         //lendo o arquivo dos filmes
         for(int i = 0; i < numInput;i++){
             Filme aux = new Filme();
-            aux.ler("../tmp/filmes/"+input[i]);
-            fila.inserir(aux);
-            System.out.println(fila.mediaDuracao());
-            // fila.mediaDuracao();
+            aux.ler("/tmp/filmes/"+input[i]);
+            pilha.inserir(aux);
+            // filmes[i].Imprimir();
         }
 
-        //lendo o nome para a verificação
-        int n = MyIO.readInt();
-        String comando;
-        String comandoP = "";
-        String pos = "";
+        pilha.quicksort();
+        pilha.imprimirA();
+        fim = now();
+        diferenca = (fim - inicio) / 1000.0;
 
-        for(int i = 0; i < n; i++){
-            comando = MyIO.readLine();
-            comandoP += comando.charAt(0);
-            // System.out.println(comandoP);
-            // separador = comando.split(" ");
-            comando = comando.trim();
-            comando = comando.substring(1);
-            comando = comando.trim();
-            // System.out.println(comando);
-            
-            Filme aux = new Filme();
-            
-            if(comandoP.equals("I") == true){
-                aux.ler("../tmp/filmes/"+comando);
-                fila.inserir(aux);
-                System.out.println(fila.mediaDuracao());
-                // fila.mediaDuracao();
-            }else if(comandoP.equals("R") == true){
-                System.out.print("(R) ");
-                System.out.println((fila.remover()).getNome());
-                // fila.getPU();
-            } 
+        br.write("750077" + "\t" + diferenca + "\t" + pilha.comparacoes);
 
-            pos = "";
-            comandoP = "";
-        }
-        int conta = 0;
-        System.out.print("[" + conta + "] ");
-        fila.mostrarRec();
-        conta++;
+        br.close();
+
     }
 
 }

@@ -471,7 +471,7 @@ class Fila {
 
 
 
-public class TP02Q07{
+public class TP03Q12{
 
     public static int contador = 0; 
 
@@ -498,7 +498,7 @@ public class TP02Q07{
         //lendo o arquivo dos filmes
         for(int i = 0; i < numInput;i++){
             Filme aux = new Filme();
-            aux.ler("../tmp/filmes/"+input[i]);
+            aux.ler("/tmp/filmes/"+input[i]);
             fila.inserir(aux);
             System.out.println(fila.mediaDuracao());
             // fila.mediaDuracao();
@@ -523,7 +523,7 @@ public class TP02Q07{
             Filme aux = new Filme();
             
             if(comandoP.equals("I") == true){
-                aux.ler("../tmp/filmes/"+comando);
+                aux.ler("/tmp/filmes/"+comando);
                 fila.inserir(aux);
                 System.out.println(fila.mediaDuracao());
                 // fila.mediaDuracao();

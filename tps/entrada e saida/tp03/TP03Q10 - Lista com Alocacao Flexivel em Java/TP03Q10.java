@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.*;
-import java.lang.Math;
 
 class Filme{
 
@@ -343,135 +342,254 @@ class Filme{
     
 }
 
-/**
- * Fila estatica
- * @author Max do Val Machado
- * @version 2 01/2015
- */
-class Fila {
-    private Filme[] array;
-    private int primeiro; // Remove do indice "primeiro".
-    private int ultimo; // Insere no indice "ultimo".
- 
- 
+class Celula {
+	public Filme elemento; // Elemento inserido na celula.
+	public Celula prox; // Aponta a celula prox.
 
-    public void getPU(){
-        System.out.println(ultimo+ " "+ primeiro);
+
+	/**
+	 * Construtor da classe.
+	 */
+	public Celula() {
+		this(null);
+	}
+
+	/**
+	 * Construtor da classe.
+	 * @param elemento int inserido na celula.
+	 */
+	public Celula(Filme elemento) {
+      this.elemento = elemento;
+      this.prox = null;
+	}
+}
+
+class Lista {
+	private Celula primeiro;
+	private Celula ultimo;
+    private int qt;
+
+	/**
+	 * Construtor da classe que cria uma lista sem elementos (somente no cabeca).
+	 */
+	public Lista() {
+		primeiro = new Celula();
+		ultimo = primeiro;
+        qt = 0;
+	}
+
+    public int getQuantity() {
+        return qt;
     }
+	/**
+	 * Insere um elemento na primeira posicao da lista.
+    * @param x int elemento a ser inserido.
+	 */
+	public void inserirInicio(Filme x) {
+		Celula tmp = new Celula(x);
+      tmp.prox = primeiro.prox;
+		primeiro.prox = tmp;
+		if (primeiro == ultimo) {                 
+			ultimo = tmp;
+		}
+        qt++;
+      tmp = null;
+	}
 
-    public int mediaDuracao(){
-        int totalDuracao = 0;
-        double total = 0.0;
-        int totalInt = 0;
-        for(int i = primeiro; i != ultimo; i = ((i + 1) % array.length)){
-            totalDuracao+=(array[i].getDuracao());
+
+	/**
+	 * Insere um elemento na ultima posicao da lista.
+    * @param x int elemento a ser inserido.
+	 */
+	public void inserirFim(Filme x) {
+		ultimo.prox = new Celula(x);
+		ultimo = ultimo.prox;
+        qt++;
+	}
+
+
+	/**
+	 * Remove um elemento da primeira posicao da lista.
+    * @return resp int elemento a ser removido.
+	 * @throws Exception Se a lista nao contiver elementos.
+	 */
+	public Filme removerInicio() {
+		if (primeiro == ultimo) {
+			//throw new Exception("Erro ao remover (vazia)!");
+		}
+
+      Celula tmp = primeiro;
+		primeiro = primeiro.prox;
+		Filme resp = primeiro.elemento;
+        tmp.prox = null;
+        tmp = null;
+        qt--;
+		return resp;
+	}
+
+
+	/**
+	 * Remove um elemento da ultima posicao da lista.
+    * @return resp int elemento a ser removido.
+	 * @throws Exception Se a lista nao contiver elementos.
+	 */
+	public Filme removerFim() {
+		if (primeiro == ultimo) {
+			//throw new Exception("Erro ao remover (vazia)!");
+		} 
+
+		// Caminhar ate a penultima celula:
+        Celula i;
+        for(i = primeiro; i.prox != ultimo; i = i.prox);
+
+        Filme resp = ultimo.elemento; 
+        ultimo = i; 
+        i = ultimo.prox = null;
+        qt--;
+
+	    return resp;
+	}
+
+
+	/**
+    * Insere um elemento em uma posicao especifica considerando que o 
+    * primeiro elemento valido esta na posicao 0.
+    * @param x int elemento a ser inserido.
+	 * @param pos int posicao da insercao.
+	 * @throws Exception Se <code>posicao</code> invalida.
+	 */
+   public void inserir(Filme x, int pos){
+
+      int tamanho = tamanho();
+
+      if(pos < 0 || pos > tamanho){
+			//throw new Exception("Erro ao inserir posicao (" + pos + " / tamanho = " + tamanho + ") invalida!");
+      } else if (pos == 0){
+         inserirInicio(x);
+      } else if (pos == tamanho){
+         inserirFim(x);
+      } else {
+		   // Caminhar ate a posicao anterior a insercao
+         Celula i = primeiro;
+         for(int j = 0; j < pos; j++, i = i.prox);
+		
+         Celula tmp = new Celula(x);
+         tmp.prox = i.prox;
+         i.prox = tmp;
+         tmp = i = null;
+         qt++;
+      }
+   }
+
+
+	/**
+    * Remove um elemento de uma posicao especifica da lista
+    * considerando que o primeiro elemento valido esta na posicao 0.
+	 * @param posicao Meio da remocao.
+    * @return resp int elemento a ser removido.
+	 * @throws Exception Se <code>posicao</code> invalida.
+	 */
+	public Filme remover(int pos) {
+      Filme resp = null;
+      int tamanho = tamanho();
+
+		if (primeiro == ultimo){
+			//throw new Exception("Erro ao remover (vazia)!");
+
+      } else if(pos < 0 || pos >= tamanho){
+			//throw new Exception("Erro ao remover (posicao " + pos + " / " + tamanho + " invalida!");
+      } else if (pos == 0){
+         resp = removerInicio();
+      } else if (pos == tamanho - 1){
+         resp = removerFim();
+      } else {
+		   // Caminhar ate a posicao anterior a insercao
+         Celula i = primeiro;
+         for(int j = 0; j < pos; j++, i = i.prox);
+		
+         Celula tmp = i.prox;
+         resp = tmp.elemento;
+         i.prox = tmp.prox;
+         tmp.prox = null;
+         i = tmp = null;
+      }
+        qt--;
+		return resp;
+	}
+
+	/**
+	 * Mostra os elementos da lista separados por espacos.
+	 */
+	public void mostrar() {
+        int cont = 0;
+		for (Celula i = primeiro.prox; i != null; i = i.prox) {
+			System.out.print("[" + cont + "] ");
+            (i.elemento).Imprimir();
+            cont++;
         }
-        total = ((totalDuracao))/((contador()));
-        totalInt = (int)(Math.ceil(total));
-        return totalInt;
-    }
+	}
     /**
-     * Construtor da classe.
-     */
-    public Fila () {
-       this(6);
-    }
- 
- 
-    /**
-     * Construtor da classe.
-     * @param tamanho Tamanho da fila.
-     */
-    public Fila (int tamanho){
-       array = new Filme[tamanho+1];
-       primeiro = ultimo = 0;
-    }
- 
- 
-    /**
-     * Insere um elemento na ultima posicao da fila.
-     * @param x int elemento a ser inserido.
-     * @throws Exception Se a fila estiver cheia.
-     */
-    public void inserir(Filme x) throws Exception {
- 
-       //validar insercao
-       if (((ultimo + 1) % array.length) == primeiro) {
-          remover();
-       }
- 
-       array[ultimo] = x;
-       ultimo = (ultimo + 1) % array.length;
-    }
- 
- 
-    /**
-     * Remove um elemento da primeira posicao da fila e movimenta 
-     * os demais elementos para o primeiro da mesma.
-     * @return resp int elemento a ser removido.
-     * @throws Exception Se a fila estiver vazia.
-     */
-    public Filme remover() throws Exception {
- 
-       //validar remocao
-       if (primeiro == ultimo) {
-          throw new Exception("Erro ao remover!");
-       }
- 
-       Filme resp = array[primeiro];
-       primeiro = (primeiro + 1) % array.length;
-       return resp;
-    }
- 
+	 * Procura um elemento e retorna se ele existe.
+	 * @param x Elemento a pesquisar.
+	 * @return <code>true</code> se o elemento existir,
+	 * <code>false</code> em caso contrario.
+	 */
+	public boolean pesquisar(Filme x) {
+		boolean resp = false;
+		for (Celula i = primeiro.prox; i != null; i = i.prox) {
+         if(i.elemento == x){
+            resp = true;
+            i = ultimo;
+         }
+		}
+		return resp;
+	}
 
-    public int contador (){
-        int totalElementos = 0;
-  
-        for(int i = primeiro; i != ultimo; i = ((i + 1) % array.length)) {
-           totalElementos++;
+	/**
+	 * Calcula e retorna o tamanho, em numero de elementos, da lista.
+	 * @return resp int tamanho
+	 */
+   public int tamanho() {
+      int tamanho = 0; 
+      for(Celula i = primeiro; i != ultimo; i = i.prox, tamanho++);
+      return tamanho;
+   }
+
+    public Filme getLast() {
+        return ultimo.elemento;
+    }
+
+    public Filme getFirst() {
+        Filme temp = null;
+        if (primeiro != ultimo) {
+            temp = primeiro.prox.elemento;
         }
-        return totalElementos;
-     }
- 
-    /**
-     * Mostra os array separados por espacos.
-     */
-    public void mostrar (){
-       System.out.print("[ ");
- 
-       for(int i = primeiro; i != ultimo; i = ((i + 1) % array.length)) {
-          System.out.print(array[i] + " ");
-       }
- 
-       System.out.println("]");
-    }
- 
-    public void mostrarRec(){
-       mostrarRec(primeiro);
-    }
- 
-    public void mostrarRec(int i){
-       if(i != ultimo){
-          array[i].Imprimir();
-          mostrarRec((i + 1) % array.length);
-       }
-    }
- 
- 
-    /**
-     * Retorna um boolean indicando se a fila esta vazia
-     * @return boolean indicando se a fila esta vazia
-     */
-    public boolean isVazia() {
-       return (primeiro == ultimo); 
+        return temp;
     }
 
- }
- 
+    public Filme getItemAt(int index) {
+        Filme resp = null;
+        if (index == 1) {
+            resp = getFirst();
+        } else if (index == qt) {
+            resp = getLast();
+        } else if ((index > 1 && index < qt) && primeiro != ultimo) {
+            Celula temp = primeiro;
+            for (int i = 0; i < index; i++, temp = temp.prox)
+                ;
+            resp = temp.elemento;
+        } else {
+            MyIO.println("ERRO - Get Index com indice " + index + " não permitido");
+        }
+        return resp;
+    }
+
+}
 
 
 
-public class TP02Q07{
+
+public class TP03Q10{
 
     public static int contador = 0; 
 
@@ -493,15 +611,14 @@ public class TP02Q07{
         }while(isFim(input[numInput++]) == false);
         numInput--;//Desconsiderar a palavra FIM
             
-        Fila fila = new Fila(5);
+        Lista lista = new Lista();
     
         //lendo o arquivo dos filmes
         for(int i = 0; i < numInput;i++){
             Filme aux = new Filme();
-            aux.ler("../tmp/filmes/"+input[i]);
-            fila.inserir(aux);
-            System.out.println(fila.mediaDuracao());
-            // fila.mediaDuracao();
+            aux.ler("/tmp/filmes/"+input[i]);
+            lista.inserirFim(aux);
+            // filmes[i].Imprimir();
         }
 
         //lendo o nome para a verificação
@@ -509,37 +626,65 @@ public class TP02Q07{
         String comando;
         String comandoP = "";
         String pos = "";
+        String removidos[] = new String[50];
 
         for(int i = 0; i < n; i++){
             comando = MyIO.readLine();
-            comandoP += comando.charAt(0);
+            for(int j = 0; j < 2; j++){
+                comandoP += comando.charAt(j);
+            }
             // System.out.println(comandoP);
             // separador = comando.split(" ");
             comando = comando.trim();
-            comando = comando.substring(1);
+            comando = comando.replace("II", "");
+            comando = comando.replace("IF", "");
+            comando = comando.replace("I*", "");
+            comando = comando.replace("RI", "");
+            comando = comando.replace("RF", "");
+            comando = comando.replace("R*", "");
             comando = comando.trim();
             // System.out.println(comando);
             
             Filme aux = new Filme();
-            
-            if(comandoP.equals("I") == true){
-                aux.ler("../tmp/filmes/"+comando);
-                fila.inserir(aux);
-                System.out.println(fila.mediaDuracao());
-                // fila.mediaDuracao();
-            }else if(comandoP.equals("R") == true){
+            if(comandoP.equals("II") == true){
+                aux.ler("/tmp/filmes/"+comando);
+                lista.inserirInicio(aux);
+            } else if(comandoP.equals("IF") == true){
+                aux.ler("/tmp/filmes/"+comando);
+                lista.inserirFim(aux);
+            } else if(comandoP.equals("I*") == true){
+                for(int j = 0; j < 2; j++){
+                    pos += comando.charAt(j);
+                }
+                comando = comando.replace(pos, "");
+                comando = comando.trim();
+                aux.ler("/tmp/filmes/"+comando);
+                // System.out.println(comando);
+                // System.out.println(pos);
+                lista.inserir(aux, Integer.parseInt(pos));;
+            } else if(comandoP.equals("RI") == true){
                 System.out.print("(R) ");
-                System.out.println((fila.remover()).getNome());
-                // fila.getPU();
-            } 
+                System.out.println((lista.removerInicio()).getNome());
+            } else if(comandoP.equals("RF") == true){
+                System.out.print("(R) ");
+                System.out.println((lista.removerFim()).getNome());
+            } else if(comandoP.equals("R*") == true){
+                for(int j = 0; j < 2; j++){
+                    pos += comando.charAt(j);
+                }
+                comando = comando.replace(pos, "");
+                comando = comando.trim();
+                // System.out.println(comando);
+                // System.out.println(pos);
+                System.out.print("(R) ");
+                System.out.println((lista.remover(Integer.parseInt(pos))).getNome());
+            }
 
             pos = "";
             comandoP = "";
-        }
-        int conta = 0;
-        System.out.print("[" + conta + "] ");
-        fila.mostrarRec();
-        conta++;
-    }
+        } 
 
+        lista.mostrar();
+    }
 }
+

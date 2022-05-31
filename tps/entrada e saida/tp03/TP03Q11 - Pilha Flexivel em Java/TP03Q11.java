@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.*;
-import java.lang.Math;
 
 class Filme{
 
@@ -336,142 +335,114 @@ class Filme{
 
     //imprimir
     public void Imprimir(){
-        MyIO.println(this.nome + this.tituloOriginal + " " + sdf.format(this.dataDeLancamento) + " " + this.duracao + " " + this.genero + " " + this.idiomaOriginal + " " + this.situacao + " " + this.orcamento  + " [" + palavraToString(this.palavrasChave) + "]");
+        MyIO.println(this.nome + this.tituloOriginal.trim() + " " + sdf.format(this.dataDeLancamento) + " " + this.duracao + " " + this.genero + " " + this.idiomaOriginal + " " + this.situacao + " " + this.orcamento  + " [" + palavraToString(this.palavrasChave) + "]");
     }
     
 
     
 }
 
-/**
- * Fila estatica
- * @author Max do Val Machado
- * @version 2 01/2015
- */
-class Fila {
-    private Filme[] array;
-    private int primeiro; // Remove do indice "primeiro".
-    private int ultimo; // Insere no indice "ultimo".
- 
- 
+class Celula {
+	public Filme elemento; // Elemento inserido na celula.
+	public Celula prox; // Aponta a celula prox.
 
-    public void getPU(){
-        System.out.println(ultimo+ " "+ primeiro);
-    }
 
-    public int mediaDuracao(){
-        int totalDuracao = 0;
-        double total = 0.0;
-        int totalInt = 0;
-        for(int i = primeiro; i != ultimo; i = ((i + 1) % array.length)){
-            totalDuracao+=(array[i].getDuracao());
-        }
-        total = ((totalDuracao))/((contador()));
-        totalInt = (int)(Math.ceil(total));
-        return totalInt;
-    }
-    /**
-     * Construtor da classe.
-     */
-    public Fila () {
-       this(6);
-    }
- 
- 
-    /**
-     * Construtor da classe.
-     * @param tamanho Tamanho da fila.
-     */
-    public Fila (int tamanho){
-       array = new Filme[tamanho+1];
-       primeiro = ultimo = 0;
-    }
- 
- 
-    /**
-     * Insere um elemento na ultima posicao da fila.
-     * @param x int elemento a ser inserido.
-     * @throws Exception Se a fila estiver cheia.
-     */
-    public void inserir(Filme x) throws Exception {
- 
-       //validar insercao
-       if (((ultimo + 1) % array.length) == primeiro) {
-          remover();
-       }
- 
-       array[ultimo] = x;
-       ultimo = (ultimo + 1) % array.length;
-    }
- 
- 
-    /**
-     * Remove um elemento da primeira posicao da fila e movimenta 
-     * os demais elementos para o primeiro da mesma.
-     * @return resp int elemento a ser removido.
-     * @throws Exception Se a fila estiver vazia.
-     */
-    public Filme remover() throws Exception {
- 
-       //validar remocao
-       if (primeiro == ultimo) {
-          throw new Exception("Erro ao remover!");
-       }
- 
-       Filme resp = array[primeiro];
-       primeiro = (primeiro + 1) % array.length;
-       return resp;
-    }
- 
+	/**
+	 * Construtor da classe.
+	 */
+	public Celula() {
+		this(null);
+	}
 
-    public int contador (){
-        int totalElementos = 0;
-  
-        for(int i = primeiro; i != ultimo; i = ((i + 1) % array.length)) {
-           totalElementos++;
-        }
-        return totalElementos;
-     }
- 
-    /**
-     * Mostra os array separados por espacos.
-     */
-    public void mostrar (){
-       System.out.print("[ ");
- 
-       for(int i = primeiro; i != ultimo; i = ((i + 1) % array.length)) {
-          System.out.print(array[i] + " ");
-       }
- 
-       System.out.println("]");
-    }
- 
-    public void mostrarRec(){
-       mostrarRec(primeiro);
-    }
- 
-    public void mostrarRec(int i){
-       if(i != ultimo){
-          array[i].Imprimir();
-          mostrarRec((i + 1) % array.length);
-       }
-    }
- 
- 
-    /**
-     * Retorna um boolean indicando se a fila esta vazia
-     * @return boolean indicando se a fila esta vazia
-     */
-    public boolean isVazia() {
-       return (primeiro == ultimo); 
+	/**
+	 * Construtor da classe.
+	 * @param elemento int inserido na celula.
+	 */
+	public Celula(Filme elemento) {
+      this.elemento = elemento;
+      this.prox = null;
+	}
+}
+
+class Pilha {
+	private Celula topo;
+    private int qtd;
+
+	/**
+	 * Construtor da classe que cria uma fila sem elementos.
+	 */
+	public Pilha() {
+		topo = null;
+        qtd = 0;
+	}
+
+	/**
+	 * Insere elemento na pilha (politica FILO).
+	 * 
+	 * @param x int elemento a inserir.
+	 */
+	public void inserir(Filme x) {
+		Celula tmp = new Celula(x);
+		tmp.prox = topo;
+		topo = tmp;
+		tmp = null;
+	}
+
+	/**
+	 * Remove elemento da pilha (politica FILO).
+	 * 
+	 * @return Elemento removido.
+	 * @trhows Exception Se a sequencia nao contiver elementos.
+	 */
+	public Filme remover() {
+		if (topo == null) {
+			
+		}
+		Filme resp = topo.elemento;
+		Celula tmp = topo;
+		topo = topo.prox;
+		tmp.prox = null;
+		tmp = null;
+        qtd--;
+		return resp;
+	}
+
+	/**
+	 * Mostra os elementos separados por espacos, comecando do topo.
+	 */
+	public void mostrar() {
+        int cont = 0;
+		for (Celula i = topo; i != null; i = i.prox) {
+            System.out.print("[" +cont+ "] ");
+			i.elemento.Imprimir();
+            cont++;
+		}
+	}
+
+	public void mostraPilha() {
+		mostraPilha(topo);
+	}
+
+    public int cont = 0;
+	private void mostraPilha(Celula i) {
+		if (i != null) {
+			mostraPilha(i.prox);
+            System.out.print("[" + cont + "] ");
+			i.elemento.Imprimir();
+            cont++;
+		}
+	}
+    public int getQuantity() {
+        return qtd;
     }
 
- }
- 
+
+}
 
 
 
-public class TP02Q07{
+
+public class TP03Q11{
 
     public static int contador = 0; 
 
@@ -493,15 +464,14 @@ public class TP02Q07{
         }while(isFim(input[numInput++]) == false);
         numInput--;//Desconsiderar a palavra FIM
             
-        Fila fila = new Fila(5);
+        Pilha pilha = new Pilha();
     
         //lendo o arquivo dos filmes
         for(int i = 0; i < numInput;i++){
             Filme aux = new Filme();
-            aux.ler("../tmp/filmes/"+input[i]);
-            fila.inserir(aux);
-            System.out.println(fila.mediaDuracao());
-            // fila.mediaDuracao();
+            aux.ler("/tmp/filmes/"+input[i]);
+            pilha.inserir(aux);
+            // filmes[i].Imprimir();
         }
 
         //lendo o nome para a verificação
@@ -509,6 +479,7 @@ public class TP02Q07{
         String comando;
         String comandoP = "";
         String pos = "";
+        String removidos[] = new String[50];
 
         for(int i = 0; i < n; i++){
             comando = MyIO.readLine();
@@ -523,23 +494,17 @@ public class TP02Q07{
             Filme aux = new Filme();
             
             if(comandoP.equals("I") == true){
-                aux.ler("../tmp/filmes/"+comando);
-                fila.inserir(aux);
-                System.out.println(fila.mediaDuracao());
-                // fila.mediaDuracao();
+                aux.ler("/tmp/filmes/"+comando);
+                pilha.inserir(aux);
             }else if(comandoP.equals("R") == true){
                 System.out.print("(R) ");
-                System.out.println((fila.remover()).getNome());
-                // fila.getPU();
+                System.out.println((pilha.remover()).getNome());
             } 
 
             pos = "";
             comandoP = "";
-        }
-        int conta = 0;
-        System.out.print("[" + conta + "] ");
-        fila.mostrarRec();
-        conta++;
+        } 
+        pilha.mostraPilha();
     }
-
 }
+
