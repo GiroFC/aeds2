@@ -1,56 +1,56 @@
-164
-123
-113
+163
+122
+112
 114
 128
 127
-138
-131
-128
+137
+130
+127
 111
 99
 97
-105
+104
 114
-118
-147
-142
+117
+146
+141
 152
-145
+144
 147
 129
-110
-98
+109
+97
 97
 92
 80
-103
+102
 114
 112
 109
 118
-116
-118
-118
-130
-123
-124
 115
-120
-(R) Duna 
-(R) Emboscada 
-(R) Encontros 
-(R) Free Guy: Assumindo o Controle 
 118
-111
+117
+130
+122
+123
+114
+120
+(R) Duna
+(R) Emboscada
+(R) Encontros
+(R) Free Guy: Assumindo o Controle
+117
+110
 107
-104
-(R) G.I. Joe Origens: Snake Eyes 
-106
+103
+(R) G.I. Joe Origens: Snake Eyes
+105
 107
-104
-(R) Golpes de Vingança 
-(R) Kimi: Alguém Está Escutando 
-(R) Licorice Pizza 
-(R) Morte no Nilo 
-[0] Mulher-Gato: A Caçada Catwoman: Hunted 22/02/2022 78 Animação,Ação,Crime Inglês Lançado 0.0 [dc comics, superhero]
+103
+(R) Golpes de Vingança
+(R) Kimi: Alguém Está Escutando
+(R) Licorice Pizza
+(R) Morte no Nilo
+[0] Kimi: Alguém Está Escutando Kimi 10/02/2022 89 Thriller Inglês Lançado 0.0 [seattle, usa, agoraphobia, mental illness, virus, covid-19]

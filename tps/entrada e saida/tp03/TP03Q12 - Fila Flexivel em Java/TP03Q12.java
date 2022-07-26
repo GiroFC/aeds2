@@ -139,11 +139,11 @@ class Filme{
             i++;
         }
         nova = nova.replace("&nbsp;", " ");
-        nova = nova.replace("TÃ­tulo original", " ");
+        nova = nova.replace("Título original", " ");
         nova = nova.replace("Idioma original", " ");
-        nova = nova.replace("SituaÃ§Ã£o", " ");
+        nova = nova.replace("Situação", " ");
         nova = nova.replace("(BR)", " ");
-        nova = nova.replace("OrÃ§amento", " ");
+        nova = nova.replace("Orçamento", " ");
         nova = nova.replace("$", " ");
         nova = nova.replace(",", "");
 
@@ -151,7 +151,7 @@ class Filme{
     }
 
 
-    //transformando o array de duraÃ§Ã£o em um inteiro de minutos
+    //transformando o array de duração em um inteiro de minutos
     public int duracaoToInt(String s){
         String aux[];
         String minuto = "";
@@ -201,7 +201,7 @@ class Filme{
         this.nome = ateParenteses(removeTags(linha).trim());
 
 
-        //Lendo a data de lanÃ§amento
+        //Lendo a data de lançamento
         
         while(!(linha=br.readLine()).contains("span class=\"release\""));
         linha = br.readLine();
@@ -218,7 +218,7 @@ class Filme{
         this.genero = palavraToStringNoSpace(auxi);
 
 
-        //Lendo a duraÃ§Ã£o
+        //Lendo a duração
         while(!(linha=br.readLine()).contains("runtime"));
         br.readLine();
         linha = br.readLine();
@@ -228,8 +228,8 @@ class Filme{
         //Lendo o Titulo Original
 
         while(!(linha=br.readLine()).contains("<section class=\"facts left_column\">"));
-        while(!(linha=br.readLine()).contains("<strong><bdi>SituaÃ§Ã£o</bdi></strong>")){
-            if((linha=br.readLine()).contains("TÃ­tulo original")){
+        while(!(linha=br.readLine()).contains("<strong><bdi>Situação</bdi></strong>")){
+            if((linha=br.readLine()).contains("Título original")){
                 this.tituloOriginal = removeTags(linha).trim();
             }
         }
@@ -239,12 +239,12 @@ class Filme{
         }
         
         
-        // while(!(linha=br.readLine()).contains("TÃ­tulo original"));
+        // while(!(linha=br.readLine()).contains("Título original"));
         // this.tituloOriginal = removeTags(linha).trim();
         
 
-        //lendo a situaÃ§Ã£o
-        //while(!(linha=br.readLine()).contains("SituaÃ§Ã£o</bdi>"));
+        //lendo a situação
+        //while(!(linha=br.readLine()).contains("Situação</bdi>"));
         this.situacao = removeTags(linha).trim();
 
         //Lendo o idioma
@@ -252,9 +252,9 @@ class Filme{
         this.idiomaOriginal = removeTags(linha).trim();
 
         
-        //Lendo o orÃ§amento
-        while(!(linha=br.readLine()).contains("OrÃ§amento"));
-        if(linha.contains("<p><strong><bdi>OrÃ§amento</bdi></strong> -</p>")){
+        //Lendo o orçamento
+        while(!(linha=br.readLine()).contains("Orçamento"));
+        if(linha.contains("<p><strong><bdi>Orçamento</bdi></strong> -</p>")){
             linha = removeTags(linha).trim();
             this.orcamento = 0;
         }else{
@@ -504,7 +504,7 @@ public class TP03Q12{
             // fila.mediaDuracao();
         }
 
-        //lendo o nome para a verificaÃ§Ã£o
+        //lendo o nome para a verificação
         int n = MyIO.readInt();
         String comando;
         String comandoP = "";
